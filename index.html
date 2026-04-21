@@ -6,7 +6,7 @@
   <title>Aware – Male Hormone Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -17,7 +17,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 24px 16px 48px;
+      padding: 32px 16px calc(48px + env(safe-area-inset-bottom));
     }
 
     .funnel-wrap {
@@ -25,52 +25,50 @@
       max-width: 480px;
     }
 
-    /* ── Logo ── */
-    .logo {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 24px;
+    /* ── Screen visibility ── */
+    .screen {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
-    .logo svg { height: 28px; }
+    .screen.active {
+      display: block;
+      opacity: 1;
+    }
+    .screen.fade-in { animation: fadeIn 0.25s ease forwards; }
 
-    /* ── Progress bar ── */
-    .progress-bar-wrap {
-      height: 4px;
-      background: #E4E1F0;
-      border-radius: 9999px;
-      margin-bottom: 32px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: #A18AFF;
-      border-radius: 9999px;
-      transition: width 0.4s ease;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ── Card ── */
     .card {
       background: #fff;
       border-radius: 24px;
-      box-shadow: 0 4px 24px rgba(4,4,4,.06);
-      padding: 32px 24px;
+      box-shadow: 0 2px 16px rgba(4,4,4,0.07), 0 0 0 1px rgba(4,4,4,0.04);
+      padding: 0;
+      overflow: hidden;
     }
 
-    /* ── Screen visibility ── */
-    .screen {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    /* Card inner — content area with padding */
+    .card-body {
+      padding: 28px 28px 32px;
     }
-    .screen.active {
-      display: block;
-      opacity: 1;
-    }
-    .screen.fade-in { animation: fadeIn 0.3s ease forwards; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* ── Progress bar — inside card, flush to top ── */
+    .progress-bar-wrap {
+      height: 3px;
+      background: #E4E1F0;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 24px 24px 0 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #A18AFF;
+      transition: width 0.4s ease;
+      border-radius: 24px 24px 0 0;
     }
 
     /* ── Back button ── */
@@ -80,55 +78,64 @@
       gap: 4px;
       background: none;
       border: none;
-      color: #7B6FA0;
-      font-size: 14px;
+      color: #605E64;
+      font-size: 0.82rem;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       padding: 0;
       transition: color 0.2s;
     }
     .back-btn:hover { color: #040404; }
 
-    /* ── Question / Headline ── */
+    /* ── Eyebrow label ── */
     .q-label {
-      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       color: #A18AFF;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      display: block;
     }
+    .q-label.hormone { color: #486EF6; }
+
+    /* ── Question text ── */
     .q-title {
-      font-size: 22px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
       font-weight: 700;
       color: #040404;
-      line-height: 1.3;
-      margin-bottom: 8px;
+      line-height: 1.35;
+      margin-bottom: 6px;
     }
     .q-sub {
-      font-size: 14px;
-      color: #7B6FA0;
-      margin-bottom: 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: #605E64;
+      line-height: 1.5;
+      margin-bottom: 20px;
     }
 
     /* ── Answer options ── */
-    .options { display: flex; flex-direction: column; gap: 12px; }
+    .options { display: flex; flex-direction: column; gap: 10px; }
 
     .option {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 16px;
-      border: 1px solid #CDC9DD;
+      padding: 0 16px;
+      min-height: 52px;
+      border: 1.5px solid #CDC9DD;
       border-radius: 14px;
       background: #fff;
       cursor: pointer;
-      font-size: 15px;
       font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
       color: #040404;
       font-weight: 500;
-      transition: border-color 0.15s, background 0.15s;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
       text-align: left;
       width: 100%;
     }
@@ -137,22 +144,54 @@
       background: #FAF9FF;
     }
     .option.selected {
-      border: 2px solid #A18AFF;
-      background: #F3F0FF;
+      border: 2px solid #486EF6;
+      background: #EEF0FF;
     }
 
     .option-icon {
-      font-size: 20px;
+      font-size: 18px;
       flex-shrink: 0;
-      width: 28px;
+      width: 24px;
       text-align: center;
+    }
+
+    /* Multi-select checkbox circle */
+    .option-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid #CDC9DD;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+      background: #fff;
+    }
+    .option.selected .option-check {
+      background: #486EF6;
+      border-color: #486EF6;
+    }
+    .option-check::after {
+      content: '';
+      display: none;
+      width: 5px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+    }
+    .option.selected .option-check::after {
+      display: block;
     }
 
     /* Multi-select hint */
     .multi-hint {
-      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
       color: #A18AFF;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       font-weight: 500;
     }
 
@@ -162,250 +201,305 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 52px;
+      height: 56px;
       background: #040404;
       color: #fff;
       border: none;
       border-radius: 9999px;
       font-family: 'Inter', sans-serif;
-      font-size: 16px;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       margin-top: 24px;
       transition: opacity 0.2s, transform 0.1s;
       text-decoration: none;
+      letter-spacing: 0.01em;
     }
-    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:hover { opacity: 0.86; }
     .btn-primary:active { transform: scale(0.98); }
     .btn-primary:disabled {
-      opacity: 0.4;
+      opacity: 0.35;
       cursor: not-allowed;
     }
 
-    /* ── Intro screen ── */
-    .intro-badge {
-      display: inline-block;
-      background: #F3F0FF;
-      color: #7B4FFF;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 5px 12px;
-      border-radius: 9999px;
+    /* ═══════════════════════════
+       INTRO SCREEN
+    ═══════════════════════════ */
+    .intro-mark {
+      display: flex;
+      justify-content: center;
       margin-bottom: 20px;
     }
-    .intro-title {
-      font-size: 28px;
-      font-weight: 700;
-      color: #040404;
-      line-height: 1.25;
-      margin-bottom: 12px;
-    }
-    .intro-body {
-      font-size: 15px;
-      color: #5A5270;
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
-    .intro-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 28px;
-    }
-    .intro-features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      color: #040404;
-      font-weight: 500;
-    }
-    .intro-features li span.check {
-      width: 20px;
-      height: 20px;
-      background: #F3F0FF;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      flex-shrink: 0;
-      color: #7B4FFF;
+
+    .intro-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #486EF6;
+      text-align: center;
+      display: block;
+      margin-bottom: 14px;
     }
 
-    /* ── Email capture ── */
-    .form-group { margin-bottom: 16px; }
+    .intro-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: #040404;
+      line-height: 1.2;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .intro-title em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .intro-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: #605E64;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .trust-line {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: #605E64;
+      margin-top: 14px;
+    }
+
+    /* ═══════════════════════════
+       EMAIL CAPTURE
+    ═══════════════════════════ */
+    .email-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      color: #040404;
+      text-align: center;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .form-group { margin-bottom: 14px; }
     .form-label {
       display: block;
-      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
       font-weight: 600;
       color: #040404;
       margin-bottom: 6px;
     }
     .form-input {
       width: 100%;
-      height: 48px;
-      border: 1px solid #CDC9DD;
+      height: 52px;
+      border: 1.5px solid #CDC9DD;
       border-radius: 12px;
       padding: 0 16px;
       font-family: 'Inter', sans-serif;
-      font-size: 15px;
+      font-size: 0.95rem;
       color: #040404;
-      background: #FAFAFA;
+      background: #fff;
       outline: none;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .form-input:focus { border-color: #A18AFF; background: #fff; }
+    .form-input:focus {
+      border-color: #A18AFF;
+      box-shadow: 0 0 0 3px rgba(161,138,255,0.15);
+    }
     .form-input.error { border-color: #FF4D4D; }
 
     .gdpr-row {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      margin-top: 4px;
+      margin-top: 6px;
     }
     .gdpr-row input[type="checkbox"] {
       width: 18px;
       height: 18px;
       flex-shrink: 0;
-      margin-top: 2px;
-      accent-color: #7B4FFF;
+      margin-top: 1px;
+      accent-color: #486EF6;
       cursor: pointer;
     }
     .gdpr-text {
-      font-size: 12px;
-      color: #7B6FA0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: #605E64;
       line-height: 1.5;
     }
-    .gdpr-text a { color: #7B4FFF; text-decoration: none; }
+    .gdpr-text a { color: #486EF6; text-decoration: none; }
     .form-error {
-      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
       color: #FF4D4D;
       margin-top: 4px;
       display: none;
     }
 
-    /* ── Result screen ── */
-    .result-headline {
-      font-size: 26px;
-      font-weight: 700;
-      color: #040404;
-      margin-bottom: 8px;
-      line-height: 1.25;
-    }
-    .result-subline {
-      font-size: 15px;
-      color: #5A5270;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-    .result-personal {
-      background: #F3F0FF;
-      border-radius: 14px;
-      padding: 16px;
-      font-size: 14px;
-      color: #3B2F6E;
-      line-height: 1.6;
-      margin-bottom: 24px;
-      font-weight: 500;
-    }
-    .biomarkers-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #A18AFF;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
-    }
-    .biomarker-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-    .biomarker-card {
-      background: #FAFAFA;
-      border: 1px solid #E8E4F4;
-      border-radius: 14px;
-      padding: 14px 16px;
+    /* ═══════════════════════════
+       RESULT SCREEN
+    ═══════════════════════════ */
+    .result-icon-wrap {
       display: flex;
-      align-items: center;
-      gap: 14px;
+      justify-content: center;
+      margin-bottom: 16px;
     }
-    .biomarker-icon {
-      width: 38px;
-      height: 38px;
-      background: #F3F0FF;
-      border-radius: 10px;
+    .result-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #CBD4FC;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 28px;
+    }
+
+    .result-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      color: #040404;
+      text-align: center;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .result-subline {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: #605E64;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .result-personal {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: #605E64;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .biomarkers-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #A18AFF;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .biomarker-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .biomarker-card {
+      background: #fff;
+      border: 1px solid #E8E6F0;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .biomarker-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #486EF6;
       flex-shrink: 0;
+      margin-top: 1px;
     }
     .biomarker-name {
-      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
       font-weight: 700;
       color: #040404;
       margin-bottom: 2px;
     }
     .biomarker-desc {
-      font-size: 12px;
-      color: #7B6FA0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: #605E64;
       line-height: 1.4;
     }
+
     .price-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      background: #F3F0FF;
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
+      background: #EEF0FF;
+      border-radius: 9999px;
+      padding: 10px 20px;
+      margin-bottom: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #486EF6;
+      letter-spacing: 0.01em;
     }
-    .price-label { font-size: 13px; color: #7B6FA0; }
-    .price-value {
-      font-size: 22px;
-      font-weight: 700;
-      color: #040404;
-    }
+
     .cta-footnote {
       text-align: center;
-      font-size: 11px;
-      color: #B0A8C8;
-      margin-top: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: #605E64;
+      margin-top: 12px;
+    }
+
+    /* ── Mobile safety ── */
+    @media (max-width: 480px) {
+      body { padding: 20px 16px calc(40px + env(safe-area-inset-bottom)); }
+      .card-body { padding: 24px 20px 28px; }
+      .intro-title { font-size: 1.85rem; }
     }
   </style>
 </head>
 <body>
 <div class="funnel-wrap">
 
-  <!-- Logo -->
-  <div class="logo">
-    <svg viewBox="0 0 80 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <text x="0" y="22" font-family="Inter, sans-serif" font-weight="700" font-size="22" fill="#040404">aware</text>
-    </svg>
-  </div>
-
-  <!-- Progress bar (hidden on intro + result) -->
-  <div class="progress-bar-wrap" id="progressWrap" style="display:none;">
-    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-  </div>
-
   <!-- ═══════════════════════════════════════════════
        SCREEN 0 — INTRO
   ═══════════════════════════════════════════════ -->
   <div class="screen active fade-in" id="screen-intro">
     <div class="card">
-      <div class="intro-badge">💡 2 Minuten Quiz</div>
-      <h1 class="intro-title">Wissen, was in deinem Körper wirklich passiert.</h1>
-      <p class="intro-body">Wenig Energie, nachlassende Leistung, veränderter Antrieb? Dein Hormonspiegel könnte die Antwort liefern. Finde in 5 Fragen heraus, ob der Aware Male Hormone Panel für dich passt.</p>
-      <ul class="intro-features">
-        <li><span class="check">✓</span>Labordiagnostik auf ärztlichem Niveau</li>
-        <li><span class="check">✓</span>Keine Überweisung nötig</li>
-        <li><span class="check">✓</span>Ergebnis + personalisierte Einordnung</li>
-        <li><span class="check">✓</span>Diskret, schnell, digital</li>
-      </ul>
-      <button class="btn-primary" onclick="startQuiz()">Jetzt starten →</button>
+      <div class="card-body" style="text-align:center;">
+
+        <!-- Aware rainbow mark -->
+        <div class="intro-mark">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aware">
+            <defs>
+              <linearGradient id="grad-rainbow" x1="0" y1="56" x2="56" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF6B6B"/>
+                <stop offset="25%" stop-color="#FFB347"/>
+                <stop offset="50%" stop-color="#A18AFF"/>
+                <stop offset="75%" stop-color="#486EF6"/>
+                <stop offset="100%" stop-color="#4ECDC4"/>
+              </linearGradient>
+            </defs>
+            <!-- Stylised A mark / awareness circle -->
+            <circle cx="28" cy="28" r="26" stroke="url(#grad-rainbow)" stroke-width="3" fill="none"/>
+            <path d="M28 12 L38 40 H18 L28 12Z" fill="url(#grad-rainbow)" opacity="0.15"/>
+            <path d="M21 32 H35" stroke="url(#grad-rainbow)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 12 L38 40" stroke="url(#grad-rainbow)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M28 12 L18 40" stroke="url(#grad-rainbow)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <span class="intro-eyebrow">Male Hormone Panel</span>
+
+        <h1 class="intro-title">Was sagen deine<br><em>Hormone</em> über dich?</h1>
+        <p class="intro-body">5 Fragen. Dein persönliches Ergebnis.</p>
+
+        <button class="btn-primary" onclick="startQuiz()">Jetzt starten →</button>
+        <p class="trust-line">🔒 Deine Daten bleiben privat</p>
+      </div>
     </div>
   </div>
 
@@ -414,23 +508,26 @@
   ═══════════════════════════════════════════════ -->
   <div class="screen" id="screen-q1">
     <div class="card">
-      <button class="back-btn" onclick="goBack('screen-intro')">← Zurück</button>
-      <div class="q-label">Frage 1 von 5</div>
-      <h2 class="q-title">Wie alt bist du?</h2>
-      <p class="q-sub">Dein Alter hilft uns, deinen Hormonhaushalt besser einzuordnen.</p>
-      <div class="options">
-        <button class="option" onclick="selectSingle(this, 'age', 'Unter 30')">
-          <span class="option-icon">🌱</span> Unter 30
-        </button>
-        <button class="option" onclick="selectSingle(this, 'age', '30–40')">
-          <span class="option-icon">⚡</span> 30–40
-        </button>
-        <button class="option" onclick="selectSingle(this, 'age', '41–50')">
-          <span class="option-icon">🎯</span> 41–50
-        </button>
-        <button class="option" onclick="selectSingle(this, 'age', 'Über 50')">
-          <span class="option-icon">🏔</span> Über 50
-        </button>
+      <div class="progress-bar-wrap" id="progressWrap-q1"><div class="progress-bar-fill" style="width:10%"></div></div>
+      <div class="card-body">
+        <button class="back-btn" onclick="goBack('screen-intro')">← Zurück</button>
+        <span class="q-label">Frage 1 von 5</span>
+        <h2 class="q-title">Wie alt bist du?</h2>
+        <p class="q-sub">Dein Alter hilft uns, deinen Hormonhaushalt besser einzuordnen.</p>
+        <div class="options">
+          <button class="option" onclick="selectSingle(this, 'age', 'Unter 30')">
+            <span class="option-icon">🌱</span> Unter 30
+          </button>
+          <button class="option" onclick="selectSingle(this, 'age', '30–40')">
+            <span class="option-icon">⚡</span> 30–40
+          </button>
+          <button class="option" onclick="selectSingle(this, 'age', '41–50')">
+            <span class="option-icon">🎯</span> 41–50
+          </button>
+          <button class="option" onclick="selectSingle(this, 'age', 'Über 50')">
+            <span class="option-icon">🏔</span> Über 50
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -440,32 +537,41 @@
   ═══════════════════════════════════════════════ -->
   <div class="screen" id="screen-q2">
     <div class="card">
-      <button class="back-btn" onclick="goBack('screen-q1')">← Zurück</button>
-      <div class="q-label">Frage 2 von 5</div>
-      <h2 class="q-title">Was beschäftigt dich aktuell?</h2>
-      <p class="q-sub">Wähle bis zu 2 Themen aus, die für dich relevant sind.</p>
-      <div class="multi-hint">Bis zu 2 auswählen</div>
-      <div class="options" id="symptomsOptions">
-        <button class="option" onclick="selectMulti(this, 'symptoms', 'Wenig Energie', 2)">
-          <span class="option-icon">🔋</span> Wenig Energie
-        </button>
-        <button class="option" onclick="selectMulti(this, 'symptoms', 'Niedriger Antrieb', 2)">
-          <span class="option-icon">📉</span> Niedriger Antrieb
-        </button>
-        <button class="option" onclick="selectMulti(this, 'symptoms', 'Libido', 2)">
-          <span class="option-icon">🔥</span> Libido
-        </button>
-        <button class="option" onclick="selectMulti(this, 'symptoms', 'Muskelaufbau fällt schwerer', 2)">
-          <span class="option-icon">💪</span> Muskelaufbau fällt schwerer
-        </button>
-        <button class="option" onclick="selectMulti(this, 'symptoms', 'Stimmungsschwankungen', 2)">
-          <span class="option-icon">🌊</span> Stimmungsschwankungen
-        </button>
-        <button class="option" onclick="selectMulti(this, 'symptoms', 'Schlafprobleme', 2)">
-          <span class="option-icon">😴</span> Schlafprobleme
-        </button>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:30%"></div></div>
+      <div class="card-body">
+        <button class="back-btn" onclick="goBack('screen-q1')">← Zurück</button>
+        <span class="q-label">Frage 2 von 5</span>
+        <h2 class="q-title">Was beschäftigt dich aktuell?</h2>
+        <p class="q-sub">Wähle bis zu 2 Themen aus, die für dich relevant sind.</p>
+        <div class="multi-hint">Bis zu 2 auswählen</div>
+        <div class="options" id="symptomsOptions">
+          <button class="option" onclick="selectMulti(this, 'symptoms', 'Wenig Energie', 2)">
+            <span class="option-check"></span>
+            <span class="option-icon">🔋</span> Wenig Energie
+          </button>
+          <button class="option" onclick="selectMulti(this, 'symptoms', 'Niedriger Antrieb', 2)">
+            <span class="option-check"></span>
+            <span class="option-icon">📉</span> Niedriger Antrieb
+          </button>
+          <button class="option" onclick="selectMulti(this, 'symptoms', 'Libido', 2)">
+            <span class="option-check"></span>
+            <span class="option-icon">🔥</span> Libido
+          </button>
+          <button class="option" onclick="selectMulti(this, 'symptoms', 'Muskelaufbau fällt schwerer', 2)">
+            <span class="option-check"></span>
+            <span class="option-icon">💪</span> Muskelaufbau fällt schwerer
+          </button>
+          <button class="option" onclick="selectMulti(this, 'symptoms', 'Stimmungsschwankungen', 2)">
+            <span class="option-check"></span>
+            <span class="option-icon">🌊</span> Stimmungsschwankungen
+          </button>
+          <button class="option" onclick="selectMulti(this, 'symptoms', 'Schlafprobleme', 2)">
+            <span class="option-check"></span>
+            <span class="option-icon">😴</span> Schlafprobleme
+          </button>
+        </div>
+        <button class="btn-primary" id="btnQ2Next" onclick="nextFromMulti()" disabled>Weiter →</button>
       </div>
-      <button class="btn-primary" id="btnQ2Next" onclick="nextFromMulti()" disabled>Weiter →</button>
     </div>
   </div>
 
@@ -474,20 +580,23 @@
   ═══════════════════════════════════════════════ -->
   <div class="screen" id="screen-q3">
     <div class="card">
-      <button class="back-btn" onclick="goBack('screen-q2')">← Zurück</button>
-      <div class="q-label">Frage 3 von 5</div>
-      <h2 class="q-title">Hast du deine Hormonspiegel schon mal messen lassen?</h2>
-      <p class="q-sub">Egal ob ja oder nein – dieser Test gibt dir klare Zahlen.</p>
-      <div class="options">
-        <button class="option" onclick="selectSingle(this, 'lastTest', 'Noch nie')">
-          <span class="option-icon">🆕</span> Noch nie
-        </button>
-        <button class="option" onclick="selectSingle(this, 'lastTest', 'Ja, vor über einem Jahr')">
-          <span class="option-icon">📅</span> Ja, vor über einem Jahr
-        </button>
-        <button class="option" onclick="selectSingle(this, 'lastTest', 'Ja, regelmäßig')">
-          <span class="option-icon">✅</span> Ja, regelmäßig
-        </button>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:50%"></div></div>
+      <div class="card-body">
+        <button class="back-btn" onclick="goBack('screen-q2')">← Zurück</button>
+        <span class="q-label">Frage 3 von 5</span>
+        <h2 class="q-title">Hast du deine Hormonspiegel schon mal messen lassen?</h2>
+        <p class="q-sub">Egal ob ja oder nein – dieser Test gibt dir klare Zahlen.</p>
+        <div class="options">
+          <button class="option" onclick="selectSingle(this, 'lastTest', 'Noch nie')">
+            <span class="option-icon">🆕</span> Noch nie
+          </button>
+          <button class="option" onclick="selectSingle(this, 'lastTest', 'Ja, vor über einem Jahr')">
+            <span class="option-icon">📅</span> Ja, vor über einem Jahr
+          </button>
+          <button class="option" onclick="selectSingle(this, 'lastTest', 'Ja, regelmäßig')">
+            <span class="option-icon">✅</span> Ja, regelmäßig
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -497,20 +606,23 @@
   ═══════════════════════════════════════════════ -->
   <div class="screen" id="screen-q4">
     <div class="card">
-      <button class="back-btn" onclick="goBack('screen-q3')">← Zurück</button>
-      <div class="q-label">Frage 4 von 5</div>
-      <h2 class="q-title">Wie würdest du deinen Lebensstil beschreiben?</h2>
-      <p class="q-sub">Dein Alltag beeinflusst deinen Hormonhaushalt stark.</p>
-      <div class="options">
-        <button class="option" onclick="selectSingle(this, 'lifestyle', 'Sehr aktiv')">
-          <span class="option-icon">🏃</span> Sehr aktiv
-        </button>
-        <button class="option" onclick="selectSingle(this, 'lifestyle', 'Aktiv')">
-          <span class="option-icon">🚴</span> Aktiv
-        </button>
-        <button class="option" onclick="selectSingle(this, 'lifestyle', 'Eher sitzend')">
-          <span class="option-icon">💻</span> Eher sitzend
-        </button>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:70%"></div></div>
+      <div class="card-body">
+        <button class="back-btn" onclick="goBack('screen-q3')">← Zurück</button>
+        <span class="q-label">Frage 4 von 5</span>
+        <h2 class="q-title">Wie würdest du deinen Lebensstil beschreiben?</h2>
+        <p class="q-sub">Dein Alltag beeinflusst deinen Hormonhaushalt stark.</p>
+        <div class="options">
+          <button class="option" onclick="selectSingle(this, 'lifestyle', 'Sehr aktiv')">
+            <span class="option-icon">🏃</span> Sehr aktiv
+          </button>
+          <button class="option" onclick="selectSingle(this, 'lifestyle', 'Aktiv')">
+            <span class="option-icon">🚴</span> Aktiv
+          </button>
+          <button class="option" onclick="selectSingle(this, 'lifestyle', 'Eher sitzend')">
+            <span class="option-icon">💻</span> Eher sitzend
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -520,23 +632,26 @@
   ═══════════════════════════════════════════════ -->
   <div class="screen" id="screen-q5">
     <div class="card">
-      <button class="back-btn" onclick="goBack('screen-q4')">← Zurück</button>
-      <div class="q-label">Frage 5 von 5</div>
-      <h2 class="q-title">Was erhoffst du dir vom Test?</h2>
-      <p class="q-sub">Dein Ziel hilft uns, dein Ergebnis richtig einzuordnen.</p>
-      <div class="options">
-        <button class="option" onclick="selectSingle(this, 'goal', 'Klarheit')">
-          <span class="option-icon">🔍</span> Klarheit
-        </button>
-        <button class="option" onclick="selectSingle(this, 'goal', 'Optimierung')">
-          <span class="option-icon">📈</span> Optimierung
-        </button>
-        <button class="option" onclick="selectSingle(this, 'goal', 'Arztgespräch vorbereiten')">
-          <span class="option-icon">🩺</span> Arztgespräch vorbereiten
-        </button>
-        <button class="option" onclick="selectSingle(this, 'goal', 'Einfach wissen wollen')">
-          <span class="option-icon">💡</span> Einfach wissen wollen
-        </button>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:90%"></div></div>
+      <div class="card-body">
+        <button class="back-btn" onclick="goBack('screen-q4')">← Zurück</button>
+        <span class="q-label">Frage 5 von 5</span>
+        <h2 class="q-title">Was erhoffst du dir vom Test?</h2>
+        <p class="q-sub">Dein Ziel hilft uns, dein Ergebnis richtig einzuordnen.</p>
+        <div class="options">
+          <button class="option" onclick="selectSingle(this, 'goal', 'Klarheit')">
+            <span class="option-icon">🔍</span> Klarheit
+          </button>
+          <button class="option" onclick="selectSingle(this, 'goal', 'Optimierung')">
+            <span class="option-icon">📈</span> Optimierung
+          </button>
+          <button class="option" onclick="selectSingle(this, 'goal', 'Arztgespräch vorbereiten')">
+            <span class="option-icon">🩺</span> Arztgespräch vorbereiten
+          </button>
+          <button class="option" onclick="selectSingle(this, 'goal', 'Einfach wissen wollen')">
+            <span class="option-icon">💡</span> Einfach wissen wollen
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -546,31 +661,34 @@
   ═══════════════════════════════════════════════ -->
   <div class="screen" id="screen-email">
     <div class="card">
-      <button class="back-btn" onclick="goBack('screen-q5')">← Zurück</button>
-      <div class="q-label">Fast geschafft</div>
-      <h2 class="q-title">Wohin sollen wir dein Ergebnis schicken?</h2>
-      <p class="q-sub">Kostenlos und unverbindlich. Deine Daten bleiben privat.</p>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:96%"></div></div>
+      <div class="card-body">
+        <button class="back-btn" onclick="goBack('screen-q5')">← Zurück</button>
 
-      <div class="form-group">
-        <label class="form-label" for="inputName">Vorname</label>
-        <input class="form-input" id="inputName" type="text" placeholder="Max" autocomplete="given-name" />
-        <div class="form-error" id="errorName">Bitte gib deinen Vornamen ein.</div>
+        <h2 class="email-title">Fast geschafft.</h2>
+        <p class="q-sub" style="text-align:center; margin-bottom:24px;">Wo sollen wir dein Ergebnis hinschicken?</p>
+
+        <div class="form-group">
+          <label class="form-label" for="inputName">Vorname</label>
+          <input class="form-input" id="inputName" type="text" placeholder="Max" autocomplete="given-name" />
+          <div class="form-error" id="errorName">Bitte gib deinen Vornamen ein.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputEmail">E-Mail-Adresse</label>
+          <input class="form-input" id="inputEmail" type="email" placeholder="max@beispiel.de" autocomplete="email" />
+          <div class="form-error" id="errorEmail">Bitte gib eine gültige E-Mail-Adresse ein.</div>
+        </div>
+
+        <div class="gdpr-row">
+          <input type="checkbox" id="gdprCheck" />
+          <label for="gdprCheck" class="gdpr-text">
+            Ich stimme zu, dass Aware Health meine Daten zur Zusendung meines Ergebnisses und relevanter Gesundheitsinformationen nutzen darf. Weitere Details in der <a href="https://www.aware.app/datenschutz" target="_blank">Datenschutzerklärung</a>.
+          </label>
+        </div>
+
+        <button class="btn-primary" id="btnShowResult" onclick="submitEmail()">Ergebnis anzeigen →</button>
       </div>
-
-      <div class="form-group">
-        <label class="form-label" for="inputEmail">E-Mail-Adresse</label>
-        <input class="form-input" id="inputEmail" type="email" placeholder="max@beispiel.de" autocomplete="email" />
-        <div class="form-error" id="errorEmail">Bitte gib eine gültige E-Mail-Adresse ein.</div>
-      </div>
-
-      <div class="gdpr-row" style="margin-top:4px; margin-bottom: 0;">
-        <input type="checkbox" id="gdprCheck" />
-        <label for="gdprCheck" class="gdpr-text">
-          Ich stimme zu, dass Aware Health meine Daten zur Zusendung meines Ergebnisses und relevanter Gesundheitsinformationen nutzen darf. Weitere Details in der <a href="https://www.aware.app/datenschutz" target="_blank">Datenschutzerklärung</a>.
-        </label>
-      </div>
-
-      <button class="btn-primary" id="btnShowResult" onclick="submitEmail()">Zeig mir mein Ergebnis →</button>
     </div>
   </div>
 
@@ -579,50 +697,55 @@
   ═══════════════════════════════════════════════ -->
   <div class="screen" id="screen-result">
     <div class="card">
-      <div class="q-label" style="color:#A18AFF;">Dein Ergebnis</div>
-      <h2 class="result-headline">Dein Hormonprofil wartet.</h2>
-      <p class="result-subline" id="resultSubline">Basierend auf deinen Antworten haben wir eine Einschätzung für dich.</p>
+      <div class="card-body">
 
-      <!-- Personalized copy block -->
-      <div class="result-personal" id="resultPersonal"></div>
+        <!-- Hormone zone illustration -->
+        <div class="result-icon-wrap">
+          <div class="result-icon">🧬</div>
+        </div>
 
-      <!-- Biomarkers -->
-      <div class="biomarkers-title">Diese Biomarker werden gemessen</div>
-      <div class="biomarker-cards">
-        <div class="biomarker-card">
-          <div class="biomarker-icon">🧪</div>
-          <div>
-            <div class="biomarker-name">Testosteron</div>
-            <div class="biomarker-desc">Das wichtigste männliche Sexualhormon – regelt Energie, Muskeln, Libido und Stimmung.</div>
+        <span class="q-label hormone" style="text-align:center; display:block;">Dein Ergebnis</span>
+        <h2 class="result-headline">Dein Hormonprofil<br>wartet auf dich.</h2>
+        <p class="result-subline" id="resultSubline">Basierend auf deinen Antworten haben wir eine Einschätzung für dich.</p>
+
+        <!-- Personalized copy block -->
+        <p class="result-personal" id="resultPersonal"></p>
+
+        <!-- Biomarkers -->
+        <span class="biomarkers-title">Diese Biomarker werden gemessen</span>
+        <div class="biomarker-cards">
+          <div class="biomarker-card">
+            <div class="biomarker-dot"></div>
+            <div>
+              <div class="biomarker-name">Testosteron</div>
+              <div class="biomarker-desc">Das wichtigste männliche Sexualhormon – regelt Energie, Muskeln, Libido und Stimmung.</div>
+            </div>
+          </div>
+          <div class="biomarker-card">
+            <div class="biomarker-dot"></div>
+            <div>
+              <div class="biomarker-name">SHBG</div>
+              <div class="biomarker-desc">Bindet Testosteron im Blut – entscheidet, wie viel davon dein Körper wirklich nutzen kann.</div>
+            </div>
+          </div>
+          <div class="biomarker-card">
+            <div class="biomarker-dot"></div>
+            <div>
+              <div class="biomarker-name">LH (Luteinisierendes Hormon)</div>
+              <div class="biomarker-desc">Steuersignal der Hirnanhangsdrüse – zeigt, ob dein Körper die Testosteronproduktion ankurbelt.</div>
+            </div>
           </div>
         </div>
-        <div class="biomarker-card">
-          <div class="biomarker-icon">🔗</div>
-          <div>
-            <div class="biomarker-name">SHBG</div>
-            <div class="biomarker-desc">Bindet Testosteron im Blut – entscheidet, wie viel davon dein Körper wirklich nutzen kann.</div>
-          </div>
-        </div>
-        <div class="biomarker-card">
-          <div class="biomarker-icon">📡</div>
-          <div>
-            <div class="biomarker-name">LH (Luteinisierendes Hormon)</div>
-            <div class="biomarker-desc">Steuersignal der Hirnanhangsdrüse – zeigt, ob dein Körper die Testosteronproduktion ankurbelt.</div>
-          </div>
-        </div>
+
+        <!-- Price -->
+        <div class="price-badge">ab €119 · Venenblut · Laborstandard</div>
+
+        <!-- CTA -->
+        <a class="btn-primary" href="https://www.aware.app/de/shop/berlin-mitte/MH" target="_blank" rel="noopener">
+          Jetzt bestellen →
+        </a>
+        <p class="cta-footnote">✓ Sichere Zahlung · Ergebnisse in 2–5 Werktagen</p>
       </div>
-
-      <!-- Price -->
-      <div class="price-badge">
-        <span class="price-label">Male Hormone Panel</span>
-        <span class="price-value">ab €119</span>
-      </div>
-
-      <!-- CTA -->
-      <a class="btn-primary" href="https://www.aware.app/de/shop/berlin-mitte/MH" target="_blank" rel="noopener">
-        Jetzt Male Hormone Panel bestellen →
-      </a>
-      <p class="cta-footnote">Keine Überweisung. Keine Wartezeit. Diskret per Post.</p>
     </div>
   </div>
 
@@ -660,16 +783,6 @@
     next.classList.add('active');
     next.classList.add('fade-in');
     next.addEventListener('animationend', () => next.classList.remove('fade-in'), { once: true });
-
-    // Progress bar
-    const wrap = document.getElementById('progressWrap');
-    const fill = document.getElementById('progressFill');
-    if (progressMap[id] !== undefined) {
-      wrap.style.display = 'block';
-      fill.style.width = progressMap[id] + '%';
-    } else {
-      wrap.style.display = 'none';
-    }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
